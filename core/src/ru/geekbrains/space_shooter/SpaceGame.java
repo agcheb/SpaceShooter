@@ -6,10 +6,13 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
+import ru.geekuniversity.engine.Base2DScreen;
+
 public class SpaceGame extends ApplicationAdapter {
 	SpriteBatch batch;
 	Texture img;
 	Texture backimg;
+	private Base2DScreen base2DScreen;
 	
 	@Override
 	public void create () {

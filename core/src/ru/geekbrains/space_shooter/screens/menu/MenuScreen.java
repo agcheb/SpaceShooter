@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 import ru.geekuniversity.engine.Base2DScreen;
+import ru.geekuniversity.engine.math.MatrixUtils;
 
 /**
  * Created by agcheb on 23.08.17.
@@ -27,9 +28,11 @@ public class MenuScreen extends Base2DScreen {
     public void show(){
         super.show();
         batch = new SpriteBatch();
+        batch.getProjectionMatrix().idt();
         img = new Texture("badlogic.jpg");
         textureBackground = new Texture("bg.png");
         textureCircle = new Texture("circle.png");
+
     }
 
     @Override
@@ -39,7 +42,7 @@ public class MenuScreen extends Base2DScreen {
         batch.begin();
         batch.draw(textureBackground,0,0);
         batch.draw(img,0,0);
-        batch.draw(textureCircle,0,0);
+        batch.draw(textureCircle,-1,-1,2,2);
         batch.end();
 //        game.setScreen();
     }

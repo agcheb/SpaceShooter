@@ -28,21 +28,23 @@ public class MenuScreen extends Base2DScreen {
     public void show(){
         super.show();
         batch = new SpriteBatch();
-        batch.getProjectionMatrix().idt();
-        img = new Texture("badlogic.jpg");
-        textureBackground = new Texture("bg.png");
+        batch.getProjectionMatrix().idt().scale(0.1f,0.1f,1); //.mul(projection);
+        //batch.setProjectionMatrix(projection);
+//        img = new Texture("badlogic.jpg");
+//        textureBackground = new Texture("bg.png");
         textureCircle = new Texture("circle.png");
 
     }
 
+
     @Override
     public void render(float delta){
-        Gdx.gl.glClearColor(1,0,0,1);
+        Gdx.gl.glClearColor(0.5f,0.5f,0.5f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        batch.draw(textureBackground,0,0);
-        batch.draw(img,0,0);
-        batch.draw(textureCircle,-1,-1,2,2);
+//        batch.draw(textureBackground,0,0);
+//        batch.draw(img,0,0);
+        batch.draw(textureCircle,-1,-1,2f,2f);
         batch.end();
 //        game.setScreen();
     }

@@ -1,5 +1,6 @@
 package ru.geekuniversity.engine.math;
 
+import com.badlogic.gdx.graphics.Camera;
 import com.badlogic.gdx.math.Vector2;
 
 /**
@@ -54,6 +55,7 @@ public class Rect {
     public  void setSize(float width, float height){
         this.halfWidth = width/ 2f;
         this.halfHeight = height/2f;}
+
     public boolean isMe(Vector2 touch){
         return  touch.x >= getLeft() && touch.x<=getRight() && touch.y >= getBottom() && touch.y<= getTop();
     }

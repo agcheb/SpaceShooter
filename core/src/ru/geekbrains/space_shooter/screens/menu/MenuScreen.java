@@ -15,7 +15,7 @@ import ru.geekuniversity.engine.math.MatrixUtils;
 
 public class MenuScreen extends Base2DScreen {
 
-    private SpriteBatch batch;
+
     private Texture img;
     private Texture textureBackground;
     private Texture textureCircle;
@@ -29,7 +29,7 @@ public class MenuScreen extends Base2DScreen {
         super.show();
         batch = new SpriteBatch();
         batch.getProjectionMatrix().idt().scale(0.1f,0.1f,1); //.mul(projection);
-        //batch.setProjectionMatrix(projection);
+//        batch.setProjectionMatrix(projection);
 //        img = new Texture("badlogic.jpg");
 //        textureBackground = new Texture("bg.png");
         textureCircle = new Texture("circle.png");

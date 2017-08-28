@@ -5,8 +5,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.math.Matrix4;
-import com.badlogic.gdx.math.Rectangle;
 
 import ru.geekuniversity.engine.math.MatrixUtils;
 import ru.geekuniversity.engine.math.Rect;
@@ -17,6 +15,7 @@ import ru.geekuniversity.engine.math.Rect;
 
 public class Base2DScreen implements Screen, InputProcessor {
 
+    protected  SpriteBatch batch;
     protected final Game game;
 //    public final Matrix4 projection = new Matrix4();
 
@@ -38,10 +37,10 @@ public class Base2DScreen implements Screen, InputProcessor {
     @Override
     public void resize(int width, int height) {
         System.out.println("resize: width = " + width + " height = " + height);
-//        float aspect = width / height;
-//        Rect rec1 = new Rect(0f,0f,1f,1f);
-//        Rect src = new Rect(width/2f,height/2f,width/2f,height/2f);
-//        MatrixUtils.calcTransitionMatrix(projection,rec1,src);
+        float ppux = (float)Gdx.graphics.getWidth()/width;
+        float ppuy =(float)Gdx.graphics.getHeight()/height;
+        float aspect = (float)height/ width;
+        batch.getProjectionMatrix().idt().scale(aspect,1,1);
 
         //batch.dispose();
 
@@ -110,7 +109,7 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        System.out.println("mousemoved x = "+ screenX + " y = "+ screenY);
+        //System.out.println("mousemoved x = "+ screenX + " y = "+ screenY);
         return false;
     }
 

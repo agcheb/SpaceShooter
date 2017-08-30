@@ -27,8 +27,7 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public void show(){
         super.show();
-        batch = new SpriteBatch();
-        batch.getProjectionMatrix().idt().scale(0.1f,0.1f,1); //.mul(projection);
+
 //        batch.setProjectionMatrix(projection);
 //        img = new Texture("badlogic.jpg");
 //        textureBackground = new Texture("bg.png");
@@ -44,15 +43,14 @@ public class MenuScreen extends Base2DScreen {
         batch.begin();
 //        batch.draw(textureBackground,0,0);
 //        batch.draw(img,0,0);
-        batch.draw(textureCircle,-1,-1,2f,2f);
+        batch.draw(textureCircle,-0.5f,-0.5f,1f,1f);
         batch.end();
 //        game.setScreen();
     }
 
     public void dispose(){
-        batch.dispose();
-        img.dispose();
-        textureBackground.dispose();
+//        img.dispose();
+//        textureBackground.dispose();
         textureCircle.dispose();
         super.dispose();
     }

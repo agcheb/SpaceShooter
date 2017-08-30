@@ -56,6 +56,14 @@ public class Rect {
         this.halfWidth = width/ 2f;
         this.halfHeight = height/2f;}
 
+    public void  setHeight(float height){
+        this.halfHeight = height/2f;
+    }
+
+    public void  setWidth(float width){
+        this.halfWidth = width/2f;
+    }
+
     public boolean isMe(Vector2 touch){
         return  touch.x >= getLeft() && touch.x<=getRight() && touch.y >= getBottom() && touch.y<= getTop();
     }

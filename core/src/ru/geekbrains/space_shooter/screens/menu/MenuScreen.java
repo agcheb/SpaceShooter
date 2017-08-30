@@ -5,6 +5,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 
 import ru.geekuniversity.engine.Base2DScreen;
 import ru.geekuniversity.engine.math.MatrixUtils;
@@ -19,6 +21,7 @@ public class MenuScreen extends Base2DScreen {
     private Texture img;
     private Texture textureBackground;
     private Texture textureCircle;
+    private TextureRegion textureRegion;
 
     public MenuScreen(Game game) {
         super(game);
@@ -32,6 +35,7 @@ public class MenuScreen extends Base2DScreen {
 //        img = new Texture("badlogic.jpg");
 //        textureBackground = new Texture("bg.png");
         textureCircle = new Texture("circle.png");
+        textureRegion = new TextureRegion(textureCircle,10,10,20,20);
 
     }
 
@@ -43,7 +47,7 @@ public class MenuScreen extends Base2DScreen {
         batch.begin();
 //        batch.draw(textureBackground,0,0);
 //        batch.draw(img,0,0);
-        batch.draw(textureCircle,-0.5f,-0.5f,1f,1f);
+        batch.draw(textureRegion,-0.5f,-0.5f,1f,1f);
         batch.end();
 //        game.setScreen();
     }
@@ -53,5 +57,20 @@ public class MenuScreen extends Base2DScreen {
 //        textureBackground.dispose();
         textureCircle.dispose();
         super.dispose();
+    }
+
+    @Override
+    protected void touchDown(Vector2 touch, int pointer) {
+        System.out.println("touchdown " +touch);
+    }
+
+    @Override
+    protected void touchUp(Vector2 touch, int pointer) {
+        System.out.println("touchup " +touch);
+    }
+
+    @Override
+    protected void touchDragged(Vector2 touch, int pointer) {
+        System.out.println("dragged " +touch);
     }
 }

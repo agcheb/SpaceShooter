@@ -5,12 +5,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.geekbrains.space_shooter.screens.stars.Star;
 import ru.geekuniversity.engine.Base2DScreen;
 import ru.geekuniversity.engine.Sprite2DTexture;
 import ru.geekuniversity.engine.math.MatrixUtils;
+import ru.geekuniversity.engine.math.Rect;
+import ru.geekuniversity.engine.math.Rnd;
 import ru.geekuniversity.engine.sprites.Sprite;
 
 /**
@@ -19,10 +23,14 @@ import ru.geekuniversity.engine.sprites.Sprite;
 
 public class MenuScreen extends Base2DScreen {
 
+    private static final float STAR_WIDTH = 0.01f;
 
-    private Sprite2DTexture textureCircle;
-    private TextureRegion textureRegion;
-    private Sprite circle;
+
+    private Sprite2DTexture textureBackGround;
+    private TextureAtlas atlas;
+    private BackGround backGround;
+    private Star star;
+
 
     public MenuScreen(Game game) {
         super(game);
@@ -31,31 +39,50 @@ public class MenuScreen extends Base2DScreen {
     @Override
     public void show(){
         super.show();
-
-//        batch.setProjectionMatrix(projection);
-//        img = new Texture("badlogic.jpg");
-//        textureBackground = new Texture("bg.png");
-        textureCircle = new Sprite2DTexture("circle.png");
-        circle = new Sprite(new TextureRegion(textureCircle));
-        circle.setWidthProportion(0.67f);
-
+        textureBackGround = new Sprite2DTexture("textures/bg.png");
+        atlas = new TextureAtlas("textures/mainAtlas.pack");
+        backGround = new BackGround(new TextureRegion(textureBackGround));
+        TextureRegion regionStar = atlas.findRegion("star");
+        float vx = Rnd.nextFloat(-0.005f,0.005f);
+        float vy = Rnd.nextFloat(-0.05f,-0.01f);
+        float starWidth = STAR_WIDTH * Rnd.nextFloat(0.75f,1f);
+        star = new Star(regionStar, vx,vy,starWidth);
     }
 
 
     @Override
+    protected void resize(Rect worldBounds) {
+        backGround.resize(worldBounds);
+        star.resize(worldBounds);
+    }
+
+    @Override
     public void render(float delta){
+    update(delta);
+       // checkCollision();
+        draw();
+    }
+
+    private void update(float deltaTime){
+        star.update(deltaTime);
+    }
+
+    private void draw(){
         Gdx.gl.glClearColor(0.5f,0.5f,0.5f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-        circle.draw(batch);
+        backGround.draw(batch);
+        star.draw(batch);
         batch.end();
-//        game.setScreen();
     }
+//    private void checkCollision(){
+//
+//    }
 
     public void dispose(){
-//        img.dispose();
-//        textureBackground.dispose();
-        textureCircle.dispose();
+
+        textureBackGround.dispose();
+        atlas.dispose();
         super.dispose();
     }
 

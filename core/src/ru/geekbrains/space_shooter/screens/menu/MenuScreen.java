@@ -9,7 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekuniversity.engine.Base2DScreen;
+import ru.geekuniversity.engine.Sprite2DTexture;
 import ru.geekuniversity.engine.math.MatrixUtils;
+import ru.geekuniversity.engine.sprites.Sprite;
 
 /**
  * Created by agcheb on 23.08.17.
@@ -18,10 +20,9 @@ import ru.geekuniversity.engine.math.MatrixUtils;
 public class MenuScreen extends Base2DScreen {
 
 
-    private Texture img;
-    private Texture textureBackground;
-    private Texture textureCircle;
+    private Sprite2DTexture textureCircle;
     private TextureRegion textureRegion;
+    private Sprite circle;
 
     public MenuScreen(Game game) {
         super(game);
@@ -34,8 +35,9 @@ public class MenuScreen extends Base2DScreen {
 //        batch.setProjectionMatrix(projection);
 //        img = new Texture("badlogic.jpg");
 //        textureBackground = new Texture("bg.png");
-        textureCircle = new Texture("circle.png");
-        textureRegion = new TextureRegion(textureCircle,10,10,20,20);
+        textureCircle = new Sprite2DTexture("circle.png");
+        circle = new Sprite(new TextureRegion(textureCircle));
+        circle.setWidthProportion(0.67f);
 
     }
 
@@ -45,9 +47,7 @@ public class MenuScreen extends Base2DScreen {
         Gdx.gl.glClearColor(0.5f,0.5f,0.5f,1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         batch.begin();
-//        batch.draw(textureBackground,0,0);
-//        batch.draw(img,0,0);
-        batch.draw(textureRegion,-0.5f,-0.5f,1f,1f);
+        circle.draw(batch);
         batch.end();
 //        game.setScreen();
     }

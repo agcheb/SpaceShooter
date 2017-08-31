@@ -130,7 +130,6 @@ public class MenuScreen extends Base2DScreen {
 
     @Override
     protected void touchDragged(Vector2 touch, int pointer) {
-        System.out.println("dragged " +touch);
         startbtn.touchDragged(touch, pointer);
         exitbtn.touchDragged(touch, pointer);
     }

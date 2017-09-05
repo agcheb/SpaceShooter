@@ -24,16 +24,15 @@ import ru.geekuniversity.engine.sprites.Sprite;
 
 public class MenuScreen extends Base2DScreen {
 
-    private static final float STAR_WIDTH = 0.01f;
-    private static final float BTN_WIDTH = 0.2f;
+    private static final float STAR_HEIGHT = 0.01f;
     private static final int STARS_COUNT = 250;
 
     private Sprite2DTexture textureBackGround;
     private TextureAtlas atlas;
     private BackGround backGround;
     private Star[] stars = new Star[STARS_COUNT];
-    private Button startbtn;
-    private Button exitbtn;
+//    private Button startbtn;
+//    private Button exitbtn;
 
 
 
@@ -45,21 +44,21 @@ public class MenuScreen extends Base2DScreen {
     public void show(){
         super.show();
         textureBackGround = new Sprite2DTexture("textures/bgmain.png");
-        atlas = new TextureAtlas("textures/mainAtlas.pack");
+        atlas = new TextureAtlas("textures/menuAtlas.tpack");
         backGround = new BackGround(new TextureRegion(textureBackGround));
         TextureRegion regionStar = atlas.findRegion("star");
-        TextureRegion regionPlay = atlas.findRegion("btPlay");
-        TextureRegion regionExit = atlas.findRegion("btExit");
+//        TextureRegion regionPlay = atlas.findRegion("btPlay");
+//        TextureRegion regionExit = atlas.findRegion("btExit");
 
         for (int i = 0; i < stars.length; i++) {
             float vx = Rnd.nextFloat(-0.005f,0.005f);
             float vy = Rnd.nextFloat(-0.05f,-0.01f);
-            float starWidth = STAR_WIDTH * Rnd.nextFloat(0.75f,1f);
-            stars[i] = new Star(regionStar, vx,vy,starWidth);
+            float starHeight = STAR_HEIGHT * Rnd.nextFloat(0.75f,1f);
+            stars[i] = new Star(regionStar, vx,vy,starHeight);
         }
 
-        startbtn = new Button(regionPlay,BTN_WIDTH);
-        exitbtn = new Button(regionExit,BTN_WIDTH);
+//        startbtn = new Button(regionPlay,BTN_WIDTH);
+//        exitbtn = new Button(regionExit,BTN_WIDTH);
         }
 
 
@@ -70,13 +69,13 @@ public class MenuScreen extends Base2DScreen {
             stars[i].resize(worldBounds);
         }
 
-        startbtn.setLeft(worldBounds.getLeft());
-        startbtn.setBottom(worldBounds.getBottom());
+//        startbtn.setLeft(worldBounds.getLeft());
+//        startbtn.setBottom(worldBounds.getBottom());
 
 
 
-        exitbtn.setRight(worldBounds.getRight());
-        exitbtn.setBottom(worldBounds.getBottom());
+//        exitbtn.setRight(worldBounds.getRight());
+//        exitbtn.setBottom(worldBounds.getBottom());
     }
 
     @Override
@@ -100,8 +99,8 @@ public class MenuScreen extends Base2DScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].draw(batch);
         }
-        startbtn.draw(batch);
-        exitbtn.draw(batch);
+//        startbtn.draw(batch);
+//        exitbtn.draw(batch);
         batch.end();
     }
 //    private void checkCollision(){
@@ -117,20 +116,20 @@ public class MenuScreen extends Base2DScreen {
 
     @Override
     protected void touchDown(Vector2 touch, int pointer) {
-        startbtn.touchDown(touch, pointer);
-        exitbtn.touchDown(touch, pointer);
+//        startbtn.touchDown(touch, pointer);
+//        exitbtn.touchDown(touch, pointer);
     }
 
     @Override
     protected void touchUp(Vector2 touch, int pointer) {
         System.out.println("touchup " +touch);
-        startbtn.touchUp(touch, pointer);
-        exitbtn.touchUp(touch, pointer);
+//        startbtn.touchUp(touch, pointer);
+//        exitbtn.touchUp(touch, pointer);
     }
 
     @Override
     protected void touchDragged(Vector2 touch, int pointer) {
-        startbtn.touchDragged(touch, pointer);
-        exitbtn.touchDragged(touch, pointer);
+//        startbtn.touchDragged(touch, pointer);
+//        exitbtn.touchDragged(touch, pointer);
     }
 }

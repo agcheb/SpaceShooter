@@ -17,21 +17,26 @@ import ru.geekuniversity.engine.math.MatrixUtils;
 import ru.geekuniversity.engine.math.Rect;
 import ru.geekuniversity.engine.math.Rnd;
 import ru.geekuniversity.engine.sprites.Sprite;
+import ui.ActionListener;
 
 /**
  * Created by agcheb on 23.08.17.
  */
 
-public class MenuScreen extends Base2DScreen {
+public class MenuScreen extends Base2DScreen implements ActionListener {
 
     private static final float STAR_HEIGHT = 0.01f;
     private static final int STARS_COUNT = 250;
+
+    private static final float BUTTONS_HEIGHT = 0.15f;
+    private static final float BUTTONS_PRESS_SCALE = 0.9f;
 
     private Sprite2DTexture textureBackGround;
     private TextureAtlas atlas;
     private BackGround backGround;
     private Star[] stars = new Star[STARS_COUNT];
-//    private Button startbtn;
+    private ButtonExit buttonExit;
+    private ButtonNewGame buttonNewGame;
 //    private Button exitbtn;
 
 
@@ -47,8 +52,6 @@ public class MenuScreen extends Base2DScreen {
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
         backGround = new BackGround(new TextureRegion(textureBackGround));
         TextureRegion regionStar = atlas.findRegion("star");
-//        TextureRegion regionPlay = atlas.findRegion("btPlay");
-//        TextureRegion regionExit = atlas.findRegion("btExit");
 
         for (int i = 0; i < stars.length; i++) {
             float vx = Rnd.nextFloat(-0.005f,0.005f);
@@ -56,11 +59,24 @@ public class MenuScreen extends Base2DScreen {
             float starHeight = STAR_HEIGHT * Rnd.nextFloat(0.75f,1f);
             stars[i] = new Star(regionStar, vx,vy,starHeight);
         }
-
-//        startbtn = new Button(regionPlay,BTN_WIDTH);
-//        exitbtn = new Button(regionExit,BTN_WIDTH);
+        buttonExit = new ButtonExit(atlas, this, BUTTONS_PRESS_SCALE);
+        buttonExit.setHeightProportion(BUTTONS_HEIGHT);
+        buttonNewGame = new ButtonNewGame(atlas, this, BUTTONS_PRESS_SCALE);
+        buttonNewGame.setHeightProportion(BUTTONS_HEIGHT);
         }
 
+        @Override
+        public void actionPerformed(Object src){
+            if(src == buttonExit){
+                Gdx.app.exit();
+            }
+            else if(src == buttonNewGame){
+                System.out.println("переключили экран на игру");
+            }
+            else {
+                throw new RuntimeException("неизвестное событие");
+            }
+        }
 
     @Override
     protected void resize(Rect worldBounds) {
@@ -68,14 +84,9 @@ public class MenuScreen extends Base2DScreen {
         for (int i = 0; i < stars.length ; i++) {
             stars[i].resize(worldBounds);
         }
+        buttonExit.resize(worldBounds);
+        buttonNewGame.resize(worldBounds);
 
-//        startbtn.setLeft(worldBounds.getLeft());
-//        startbtn.setBottom(worldBounds.getBottom());
-
-
-
-//        exitbtn.setRight(worldBounds.getRight());
-//        exitbtn.setBottom(worldBounds.getBottom());
     }
 
     @Override
@@ -100,7 +111,8 @@ public class MenuScreen extends Base2DScreen {
             stars[i].draw(batch);
         }
 //        startbtn.draw(batch);
-//        exitbtn.draw(batch);
+        buttonExit.draw(batch);
+        buttonNewGame.draw(batch);
         batch.end();
     }
 //    private void checkCollision(){
@@ -116,15 +128,15 @@ public class MenuScreen extends Base2DScreen {
 
     @Override
     protected void touchDown(Vector2 touch, int pointer) {
-//        startbtn.touchDown(touch, pointer);
-//        exitbtn.touchDown(touch, pointer);
+        buttonNewGame.touchDown(touch, pointer);
+        buttonExit.touchDown(touch, pointer);
     }
 
     @Override
     protected void touchUp(Vector2 touch, int pointer) {
         System.out.println("touchup " +touch);
-//        startbtn.touchUp(touch, pointer);
-//        exitbtn.touchUp(touch, pointer);
+        buttonNewGame.touchUp(touch, pointer);
+        buttonExit.touchUp(touch, pointer);
     }
 
     @Override

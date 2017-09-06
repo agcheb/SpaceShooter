@@ -3,20 +3,17 @@ package ru.geekbrains.space_shooter.screens.menu;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.space_shooter.screens.buttons.Button;
+import ru.geekbrains.space_shooter.screens.game.GameScreen;
 import ru.geekbrains.space_shooter.screens.stars.Star;
+import ru.geekbrains.space_shooter.screens.BackGround;
 import ru.geekuniversity.engine.Base2DScreen;
 import ru.geekuniversity.engine.Sprite2DTexture;
-import ru.geekuniversity.engine.math.MatrixUtils;
 import ru.geekuniversity.engine.math.Rect;
 import ru.geekuniversity.engine.math.Rnd;
-import ru.geekuniversity.engine.sprites.Sprite;
 import ui.ActionListener;
 
 /**
@@ -71,10 +68,10 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
                 Gdx.app.exit();
             }
             else if(src == buttonNewGame){
-                System.out.println("переключили экран на игру");
+                game.setScreen(new GameScreen(game));
             }
             else {
-                throw new RuntimeException("неизвестное событие");
+                throw new RuntimeException("неизвестное событие " + src);
             }
         }
 
@@ -119,6 +116,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
 //
 //    }
 
+    @Override
     public void dispose(){
 
         textureBackGround.dispose();
@@ -139,9 +137,4 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         buttonExit.touchUp(touch, pointer);
     }
 
-    @Override
-    protected void touchDragged(Vector2 touch, int pointer) {
-//        startbtn.touchDragged(touch, pointer);
-//        exitbtn.touchDragged(touch, pointer);
-    }
 }

@@ -20,8 +20,6 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     private static final float WORLD_HEIGHT = 1f;
 
-    // С помощью батчера будет рисовать спрайты в наследниках
-    protected  SpriteBatch batch;
     protected final Game game;
 
     private final Rect screenBounds = new Rect(); //граница области рисования в px
@@ -36,6 +34,7 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     protected final Matrix4 matWorldToGL = new Matrix4();
 
+
     /**
      * Эту матрицу мы будем использовать чтобы переводить тачи из экранных координат в мировые
      * Здесь лучше использовать матрицу 3х3, так как класс Vector2 умеет умножаться на нее
@@ -43,6 +42,8 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     protected final Matrix3 matScreenToWorld = new Matrix3();
 
+    // С помощью батчера будет рисовать спрайты в наследниках
+    protected  SpriteBatch batch;
 
     public Base2DScreen(Game game) {
         this.game = game;

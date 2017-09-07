@@ -13,7 +13,7 @@ import ru.geekuniversity.engine.sprites.Sprite;
 
 public class Star extends Sprite {
 
-    private final Vector2 v = new Vector2();
+    protected final Vector2 v = new Vector2();
     private Rect worldBounds;
 
     public Star(TextureRegion region, float vx, float vy, float height) {

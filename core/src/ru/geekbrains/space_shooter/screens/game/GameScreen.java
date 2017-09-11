@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.space_shooter.screens.BackGround;
-import ru.geekbrains.space_shooter.screens.stars.TrackedStar;
+import ru.geekbrains.space_shooter.screens.stars.TrackingStar;
 import ru.geekuniversity.engine.Base2DScreen;
 import ru.geekuniversity.engine.Sprite2DTexture;
 import ru.geekuniversity.engine.math.Rect;
@@ -21,9 +21,9 @@ import ru.geekuniversity.engine.math.Rnd;
 public class GameScreen extends Base2DScreen {
 
     private static final float STAR_HEIGHT = 0.01f;
-    private static final int STARS_COUNT = 250;
+    private static final int STARS_COUNT = 50;
 
-    private TrackedStar[] stars = new TrackedStar[STARS_COUNT];
+    private TrackingStar[] stars = new TrackingStar[STARS_COUNT];
     private Sprite2DTexture textureBackGround;
     private TextureAtlas atlas;
     private BackGround backGround;
@@ -46,7 +46,7 @@ public class GameScreen extends Base2DScreen {
             float vx = Rnd.nextFloat(-0.005f,0.005f);
             float vy = Rnd.nextFloat(-0.05f,-0.01f);
             float starHeight = STAR_HEIGHT * Rnd.nextFloat(0.75f,1f);
-            stars[i] = new TrackedStar(atlas,mainShip, vx,vy,starHeight);
+            stars[i] = new TrackingStar(atlas,mainShip, vx,vy,starHeight);
         }
     }
 

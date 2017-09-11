@@ -44,12 +44,12 @@ public class MainShip extends Sprite {
 
     //команды управления кораблем
     private void moveRight(){
-        if(!rightbound)v.set(v0);       //реализация через флаги контакта с границей
+        v.set(v0);       //реализация через флаги контакта с границей
     }
 
 
     private void moveLeft(){
-        if(!leftbound)v.set(v0).rotate(180);//реализация через флаги контакта с границей
+        v.set(v0).rotate(180);//реализация через флаги контакта с границей
     }
 
     private void stop(){
@@ -62,8 +62,6 @@ public class MainShip extends Sprite {
     private static final int INVALID_POINTER = -1;
     private int leftPointer = INVALID_POINTER;
     private int rightPointer = INVALID_POINTER;
-    private boolean leftbound;
-    private boolean rightbound;
     @Override
     public boolean touchDown(Vector2 touch, int pointer) {
         if(touch.x < worldBounds.pos.x){
@@ -126,9 +124,7 @@ public class MainShip extends Sprite {
         // решение через аналог со звездами
 //        if(getRight() < worldBounds.getLeft()) setRight(worldBounds.getRight());
 //        if(getLeft() > worldBounds.getRight()) setLeft(worldBounds.getLeft());
-        leftbound=false;
-        rightbound=false;
-        if(getLeft() < worldBounds.getLeft()){stop();leftbound = true;}
-        if(getRight() > worldBounds.getRight()){stop();rightbound = true;}
+        if(getLeft() < worldBounds.getLeft()){setLeft(worldBounds.getLeft());stop();}
+        if(getRight() > worldBounds.getRight()){setRight(worldBounds.getRight());stop();}
      }
 }

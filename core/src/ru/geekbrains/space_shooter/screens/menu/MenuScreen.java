@@ -2,6 +2,7 @@ package ru.geekbrains.space_shooter.screens.menu;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -34,6 +35,8 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
     private Star[] stars = new Star[STARS_COUNT];
     private ButtonExit buttonExit;
     private ButtonNewGame buttonNewGame;
+
+    private Music menuMusic;
 //    private Button exitbtn;
 
 
@@ -47,6 +50,13 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         super.show();
         textureBackGround = new Sprite2DTexture("textures/bgmain.png");
         atlas = new TextureAtlas("textures/menuAtlas.tpack");
+
+        //добавили музыку в меню
+        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/menumsc.mp3"));
+        menuMusic.setLooping(true);
+        menuMusic.setVolume(0.7f);
+        menuMusic.play();
+
         backGround = new BackGround(new TextureRegion(textureBackGround));
         TextureRegion regionStar = atlas.findRegion("star");
 
@@ -60,6 +70,8 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
         buttonExit.setHeightProportion(BUTTONS_HEIGHT);
         buttonNewGame = new ButtonNewGame(atlas, this, BUTTONS_PRESS_SCALE);
         buttonNewGame.setHeightProportion(BUTTONS_HEIGHT);
+
+
         }
 
         @Override
@@ -121,6 +133,7 @@ public class MenuScreen extends Base2DScreen implements ActionListener {
 
         textureBackGround.dispose();
         atlas.dispose();
+        menuMusic.dispose();
         super.dispose();
     }
 

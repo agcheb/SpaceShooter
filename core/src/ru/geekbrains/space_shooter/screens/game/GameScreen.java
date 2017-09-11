@@ -56,6 +56,7 @@ public class GameScreen extends Base2DScreen {
         explosionPool = new ExplosionPool(atlas,sndExplosion);
 
 
+
         for (int i = 0; i < stars.length; i++) {
             float vx = Rnd.nextFloat(-0.005f,0.005f);
             float vy = Rnd.nextFloat(-0.05f,-0.01f);

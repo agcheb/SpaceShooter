@@ -18,13 +18,13 @@ import ru.geekuniversity.engine.math.Rect;
 
 public class Base2DScreen implements Screen, InputProcessor {
 
-    private static final float WORLD_HEIGHT = 1f;
+    protected static final float WORLD_HEIGHT = 1f;
 
     protected final Game game;
 
-    private final Rect screenBounds = new Rect(); //граница области рисования в px
-    private final Rect worldBounds = new Rect(); // желаемая граница проекций мировых координат
-    private final Rect glBounds = new Rect(0f,0f,1f,1f); //дефолтные границы проекции мир - gl
+    protected final Rect screenBounds = new Rect(); //граница области рисования в px
+    protected final Rect worldBounds = new Rect(); // желаемая граница проекций мировых координат
+    protected final Rect glBounds = new Rect(0f,0f,1f,1f); //дефолтные границы проекции мир - gl
 
     /**
      * Эта матрица используется SpriteBatch.
@@ -51,7 +51,7 @@ public class Base2DScreen implements Screen, InputProcessor {
 
     @Override
     public void show() {
-        System.out.println("show");
+        System.out.println("Screen show");
         Gdx.input.setInputProcessor(this);
         if(batch!= null) throw new RuntimeException("batch!= null, повторная установка screen без dispose");
         batch = new SpriteBatch();

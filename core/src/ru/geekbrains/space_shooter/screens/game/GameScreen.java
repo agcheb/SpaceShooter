@@ -27,6 +27,8 @@ public class GameScreen extends Base2DScreen {
     private static final float STAR_HEIGHT = 0.01f;
     private static final int STARS_COUNT = 50;
 
+    private Rect worldBounds;
+
     private final BulletPool bulletPool= new BulletPool();
     private ExplosionPool explosionPool;
 
@@ -67,6 +69,7 @@ public class GameScreen extends Base2DScreen {
 
     @Override
     protected void resize(Rect worldBounds) {
+        this.worldBounds = worldBounds;
         backGround.resize(worldBounds);
         for (int i = 0; i < stars.length ; i++) {
             stars[i].resize(worldBounds);
@@ -83,7 +86,24 @@ public class GameScreen extends Base2DScreen {
         draw();
     }
 
+    private float explosionInterval = 3f;
+    private float explosionTimer;
+
+
+
     private  void update(float deltaTime){
+
+        explosionTimer+=deltaTime;
+        if (explosionTimer>=explosionInterval){
+            explosionTimer=0f;
+            float posX = Rnd.nextFloat(worldBounds.getLeft(),worldBounds.getRight());
+            float posY = Rnd.nextFloat(worldBounds.getBottom(),worldBounds.getTop());
+            Explosion explosion = explosionPool.obtain();
+            Vector2 pos = new Vector2(posX,posY);
+            explosion.set(0.2f,pos);
+        }
+
+
         mainShip.update(deltaTime);
         for (int i = 0; i < stars.length ; i++) {
             stars[i].update(deltaTime);
@@ -129,8 +149,6 @@ public class GameScreen extends Base2DScreen {
     @Override
     protected void touchDown(Vector2 touch, int pointer) {
         mainShip.touchDown(touch, pointer);
-        Explosion explosion = explosionPool.obtain();
-        explosion.set(0.1f,touch);
 
     }
 

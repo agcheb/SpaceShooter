@@ -1,5 +1,6 @@
 package ru.geekbrains.space_shooter.screens;
 
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
@@ -14,14 +15,18 @@ public class Explosion extends Sprite {
     private float animateInterval = 0.017f;
     private float animateTimer;
 
-    public Explosion(TextureRegion region, int rows, int cols, int frames) {
+    private final Sound sndExplosion;
+
+    public Explosion(TextureRegion region, int rows, int cols, int frames, Sound sndExplosion) {
         super(region, rows, cols, frames);
+        this.sndExplosion = sndExplosion;
     }
 
     public void set(float height, Vector2 pos){
         frame = 0;
         this.pos.set(pos);
         setHeightProportion(height);
+        if(sndExplosion.play()==-1) throw new RuntimeException("звука нет");
     }
 
     @Override

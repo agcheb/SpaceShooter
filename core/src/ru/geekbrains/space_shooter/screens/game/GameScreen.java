@@ -2,6 +2,7 @@ package ru.geekbrains.space_shooter.screens.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
@@ -27,7 +28,6 @@ public class GameScreen extends Base2DScreen {
     private static final float STAR_HEIGHT = 0.01f;
     private static final int STARS_COUNT = 50;
 
-    private Rect worldBounds;
 
     private final BulletPool bulletPool= new BulletPool();
     private ExplosionPool explosionPool;
@@ -40,6 +40,8 @@ public class GameScreen extends Base2DScreen {
 
     private Sound sndExplosion;
 
+    private Music menuMusic;
+
     public GameScreen(Game game) {
         super(game);
     }
@@ -50,6 +52,12 @@ public class GameScreen extends Base2DScreen {
         textureBackGround = new Sprite2DTexture("textures/bgmain.png");
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         backGround = new BackGround(new TextureRegion(textureBackGround));
+
+
+        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/menumsc.mp3"));
+        menuMusic.setLooping(true);
+        menuMusic.setVolume(0.7f);
+        menuMusic.play();
 
         mainShip = new MainShip(atlas, bulletPool);
 
@@ -69,7 +77,6 @@ public class GameScreen extends Base2DScreen {
 
     @Override
     protected void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
         backGround.resize(worldBounds);
         for (int i = 0; i < stars.length ; i++) {
             stars[i].resize(worldBounds);
@@ -86,22 +93,22 @@ public class GameScreen extends Base2DScreen {
         draw();
     }
 
-    private float explosionInterval = 3f;
-    private float explosionTimer;
+//    private float explosionInterval = 3f;
+//    private float explosionTimer;
 
 
 
     private  void update(float deltaTime){
 
-        explosionTimer+=deltaTime;
-        if (explosionTimer>=explosionInterval){
-            explosionTimer=0f;
-            float posX = Rnd.nextFloat(worldBounds.getLeft(),worldBounds.getRight());
-            float posY = Rnd.nextFloat(worldBounds.getBottom(),worldBounds.getTop());
-            Explosion explosion = explosionPool.obtain();
-            Vector2 pos = new Vector2(posX,posY);
-            explosion.set(0.2f,pos);
-        }
+//        explosionTimer+=deltaTime;
+//        if (explosionTimer>=explosionInterval){
+//            explosionTimer=0f;
+//            float posX = Rnd.nextFloat(worldBounds.getLeft(),worldBounds.getRight());
+//            float posY = Rnd.nextFloat(worldBounds.getBottom(),worldBounds.getTop());
+//            Explosion explosion = explosionPool.obtain();
+//            Vector2 pos = new Vector2(posX,posY);
+//            explosion.set(0.2f,pos);
+//        }
 
 
         mainShip.update(deltaTime);

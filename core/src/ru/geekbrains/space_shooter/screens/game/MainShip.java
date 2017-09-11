@@ -4,6 +4,8 @@ import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.geekbrains.space_shooter.Ship;
+import ru.geekbrains.space_shooter.pools.BulletPool;
 import ru.geekuniversity.engine.math.Rect;
 import ru.geekuniversity.engine.sprites.Sprite;
 
@@ -11,18 +13,27 @@ import ru.geekuniversity.engine.sprites.Sprite;
  * Created by agcheb on 06.09.17.
  */
 
-public class MainShip extends Sprite {
+public class MainShip extends Ship {
 
     private static final float SHIP_HEIGHT = 0.15f;
     private static final float BOTTOM_MARGIN = 0.05f;
 
-    private Rect worldBounds;
     private final Vector2 v0 = new Vector2(0.5f,0f);
-    private final Vector2 v = new Vector2();
 
-    MainShip(TextureAtlas atlas) {
+
+    MainShip(TextureAtlas atlas, BulletPool bulletPool) {
         super(atlas.findRegion("main_ship"),1,2,2);
         setHeightProportion(SHIP_HEIGHT);
+        this.bulletPool = bulletPool;
+        bulletRegion = atlas.findRegion("bulletMainShip");
+        bulletHeight = 0.01f;
+        bulletV.set(0f,0.5f);
+        bulletDamage = 1;
+
+        reloadInterval = 0.15f;
+
+
+
     }
 
     public Vector2 getV() {
@@ -32,12 +43,17 @@ public class MainShip extends Sprite {
     @Override
     public void update(float deltaTime) {
         pos.mulAdd(v,deltaTime);
+        reloadTimer+= deltaTime;
+        if(reloadTimer>=reloadInterval){
+            reloadTimer=0f;
+            shoot();
+        }
         checkAndHandleBounds();
     }
 
     @Override
     public void resize(Rect worldBounds) {
-        this.worldBounds = worldBounds;
+        super.resize(worldBounds);
         setBottom(worldBounds.getBottom()+BOTTOM_MARGIN);
     }
 
@@ -98,7 +114,7 @@ public class MainShip extends Sprite {
             case Input.Keys.LEFT: pressedLeft = true; moveLeft();break;
             case Input.Keys.D:
             case Input.Keys.RIGHT: pressedRight = true; moveRight();break;
-            case Input.Keys.UP: frame = 1; break;
+            case Input.Keys.UP: shoot(); break;
         }
     }
 

@@ -7,7 +7,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
+import ru.geekbrains.space_shooter.pools.BulletPool;
+import ru.geekbrains.space_shooter.pools.ExplosionPool;
 import ru.geekbrains.space_shooter.screens.BackGround;
+import ru.geekbrains.space_shooter.screens.Explosion;
 import ru.geekbrains.space_shooter.screens.stars.TrackingStar;
 import ru.geekuniversity.engine.Base2DScreen;
 import ru.geekuniversity.engine.Sprite2DTexture;
@@ -22,6 +25,9 @@ public class GameScreen extends Base2DScreen {
 
     private static final float STAR_HEIGHT = 0.01f;
     private static final int STARS_COUNT = 50;
+
+    private final BulletPool bulletPool= new BulletPool();
+    private ExplosionPool explosionPool;
 
     private TrackingStar[] stars = new TrackingStar[STARS_COUNT];
     private Sprite2DTexture textureBackGround;
@@ -40,7 +46,8 @@ public class GameScreen extends Base2DScreen {
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         backGround = new BackGround(new TextureRegion(textureBackGround));
 
-        mainShip = new MainShip(atlas);
+        mainShip = new MainShip(atlas, bulletPool);
+        explosionPool = new ExplosionPool(atlas);
 
         for (int i = 0; i < stars.length; i++) {
             float vx = Rnd.nextFloat(-0.005f,0.005f);
@@ -53,10 +60,12 @@ public class GameScreen extends Base2DScreen {
     @Override
     protected void resize(Rect worldBounds) {
         backGround.resize(worldBounds);
-        mainShip.resize(worldBounds);
         for (int i = 0; i < stars.length ; i++) {
             stars[i].resize(worldBounds);
         }
+        mainShip.resize(worldBounds);
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(0.1f,worldBounds.pos);
 
     }
 
@@ -73,6 +82,8 @@ public class GameScreen extends Base2DScreen {
         for (int i = 0; i < stars.length ; i++) {
             stars[i].update(deltaTime);
         }
+        bulletPool.updateActiveSprites(deltaTime);
+        explosionPool.updateActiveSprites(deltaTime);
 
     }
 
@@ -81,7 +92,8 @@ public class GameScreen extends Base2DScreen {
     }
 
     private  void  deleteAllDestroyed(){
-
+        bulletPool.freeAllDestroyedActiveObjects();
+        explosionPool.freeAllDestroyedActiveObjects();
     }
 
     private void draw(){
@@ -93,13 +105,17 @@ public class GameScreen extends Base2DScreen {
             stars[i].draw(batch);
         }
         mainShip.draw(batch);
+        bulletPool.drawActiveSprites(batch);
+        explosionPool.drawActiveSprites(batch);
         batch.end();
 
     }
     @Override
     public void dispose() {
+        explosionPool.dispose();
         textureBackGround.dispose();
         atlas.dispose();
+        bulletPool.dispose();
         super.dispose();
     }
 

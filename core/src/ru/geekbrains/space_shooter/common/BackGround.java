@@ -1,4 +1,4 @@
-package ru.geekbrains.space_shooter.screens;
+package ru.geekbrains.space_shooter.common;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 

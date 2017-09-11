@@ -1,9 +1,8 @@
-package ru.geekbrains.space_shooter.screens;
+package ru.geekbrains.space_shooter.common.explosions;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-
 import ru.geekuniversity.engine.sprites.Sprite;
 
 /**
@@ -17,7 +16,7 @@ public class Explosion extends Sprite {
 
     private final Sound sndExplosion;
 
-    public Explosion(TextureRegion region, int rows, int cols, int frames, Sound sndExplosion) {
+    Explosion(TextureRegion region, int rows, int cols, int frames, Sound sndExplosion) {
         super(region, rows, cols, frames);
         this.sndExplosion = sndExplosion;
     }

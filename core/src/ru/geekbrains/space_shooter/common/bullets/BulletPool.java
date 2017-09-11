@@ -1,8 +1,6 @@
-package ru.geekbrains.space_shooter.pools;
+package ru.geekbrains.space_shooter.common.bullets;
 
-import ru.geekbrains.space_shooter.screens.Bullet;
 import ru.geekuniversity.engine.pool.SpritesPool;
-import ru.geekuniversity.engine.sprites.Sprite;
 
 /**
  * Created by agcheb on 11.09.17.

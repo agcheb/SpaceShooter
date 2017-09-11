@@ -1,10 +1,10 @@
-package ru.geekbrains.space_shooter.pools;
+package ru.geekbrains.space_shooter.common.explosions;
 
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import ru.geekbrains.space_shooter.screens.Explosion;
+import ru.geekbrains.space_shooter.common.explosions.Explosion;
 import ru.geekuniversity.engine.pool.SpritesPool;
 
 /**

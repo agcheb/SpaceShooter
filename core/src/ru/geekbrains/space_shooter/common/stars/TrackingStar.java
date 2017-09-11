@@ -1,16 +1,14 @@
-package ru.geekbrains.space_shooter.screens.stars;
+package ru.geekbrains.space_shooter.common.stars;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.space_shooter.screens.game.MainShip;
+import ru.geekbrains.space_shooter.screens.game_screen.MainShip;
 
 /**
  * Created by agcheb on 07.09.17.
  */
 
-public class TrackingStar extends Star {
+public class TrackingStar extends ru.geekbrains.space_shooter.common.stars.Star {
 
     private MainShip ship;
         public TrackingStar(TextureAtlas atlas, MainShip ship, float vx, float vy, float height) {

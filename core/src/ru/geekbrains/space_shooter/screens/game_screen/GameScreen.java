@@ -1,4 +1,4 @@
-package ru.geekbrains.space_shooter.screens.game;
+package ru.geekbrains.space_shooter.screens.game_screen;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
@@ -9,11 +9,10 @@ import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.space_shooter.pools.BulletPool;
-import ru.geekbrains.space_shooter.pools.ExplosionPool;
-import ru.geekbrains.space_shooter.screens.BackGround;
-import ru.geekbrains.space_shooter.screens.Explosion;
-import ru.geekbrains.space_shooter.screens.stars.TrackingStar;
+import ru.geekbrains.space_shooter.common.bullets.BulletPool;
+import ru.geekbrains.space_shooter.common.explosions.ExplosionPool;
+import ru.geekbrains.space_shooter.common.BackGround;
+import ru.geekbrains.space_shooter.common.stars.TrackingStar;
 import ru.geekuniversity.engine.Base2DScreen;
 import ru.geekuniversity.engine.Sprite2DTexture;
 import ru.geekuniversity.engine.math.Rect;

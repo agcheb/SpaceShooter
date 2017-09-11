@@ -2,7 +2,7 @@ package ru.geekbrains.space_shooter;
 
 import com.badlogic.gdx.Game;
 
-import ru.geekbrains.space_shooter.screens.menu.MenuScreen;
+import ru.geekbrains.space_shooter.screens.menu_screen.MenuScreen;
 
 /**
  * Created by agcheb on 23.08.17.

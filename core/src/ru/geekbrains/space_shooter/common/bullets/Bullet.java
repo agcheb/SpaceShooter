@@ -1,4 +1,4 @@
-package ru.geekbrains.space_shooter.screens;
+package ru.geekbrains.space_shooter.common.bullets;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
@@ -17,7 +17,7 @@ public class Bullet extends Sprite {
     private int damage;
     private Object owner;
 
-    public Bullet() {
+    Bullet() {
         regions = new TextureRegion[1];
     }
 

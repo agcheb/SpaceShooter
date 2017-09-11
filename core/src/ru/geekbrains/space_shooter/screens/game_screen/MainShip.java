@@ -1,13 +1,12 @@
-package ru.geekbrains.space_shooter.screens.game;
+package ru.geekbrains.space_shooter.screens.game_screen;
 
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
-import ru.geekbrains.space_shooter.Ship;
-import ru.geekbrains.space_shooter.pools.BulletPool;
+import ru.geekbrains.space_shooter.common.Ship;
+import ru.geekbrains.space_shooter.common.bullets.BulletPool;
 import ru.geekuniversity.engine.math.Rect;
-import ru.geekuniversity.engine.sprites.Sprite;
 
 /**
  * Created by agcheb on 06.09.17.

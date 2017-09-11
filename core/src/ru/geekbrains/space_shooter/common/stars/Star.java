@@ -1,4 +1,4 @@
-package ru.geekbrains.space_shooter.screens.stars;
+package ru.geekbrains.space_shooter.common.stars;
 
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;

@@ -56,20 +56,30 @@ public class Enemy extends Ship {
         this.hp = hp;
         setHeightProportion(height);
         reloadTimer = reloadInterval;
-        v.set(v0);
+        v.set(decentV);
         state = State.DESCENT;
     }
 
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
-        reloadTimer+=deltaTime;
-        if (reloadTimer>=reloadInterval){
-            reloadTimer=0f;
-            shoot();
-        }
-        if (getBottom() < worldBounds.getBottom()){
-            destroy();
+        switch (state) {
+
+            case DESCENT:if (getTop()<=worldBounds.getTop()){
+                v.set(v0);
+                state = State.FIGHT;
+                break;
+            }
+            case FIGHT:
+                reloadTimer += deltaTime;
+            if (reloadTimer >= reloadInterval) {
+                reloadTimer = 0f;
+                shoot();
+            }
+            if (getBottom() < worldBounds.getBottom()) {
+                destroy();
+            }
+            break;
         }
     }
 

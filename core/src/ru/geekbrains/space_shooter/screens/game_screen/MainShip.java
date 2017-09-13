@@ -1,11 +1,13 @@
 package ru.geekbrains.space_shooter.screens.game_screen;
 
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.space_shooter.common.Ship;
 import ru.geekbrains.space_shooter.common.bullets.BulletPool;
+import ru.geekbrains.space_shooter.common.explosions.ExplosionPool;
 import ru.geekuniversity.engine.math.Rect;
 
 /**
@@ -20,10 +22,12 @@ public class MainShip extends Ship {
     private final Vector2 v0 = new Vector2(0.5f,0f);
 
 
-    MainShip(TextureAtlas atlas, BulletPool bulletPool) {
-        super(atlas.findRegion("main_ship"),1,2,2);
+    MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound bulletSound) {
+        super(atlas.findRegion("main_ship"),1,2,2,bulletPool,explosionPool,worldBounds);
+
+        this.bulletSound = bulletSound;
+
         setHeightProportion(SHIP_HEIGHT);
-        this.bulletPool = bulletPool;
         bulletRegion = atlas.findRegion("bulletMainShip");
         bulletHeight = 0.01f;
         bulletV.set(0f,0.5f);

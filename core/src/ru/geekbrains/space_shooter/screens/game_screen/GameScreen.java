@@ -10,6 +10,8 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.space_shooter.common.bullets.BulletPool;
+import ru.geekbrains.space_shooter.common.enemies.EnemiesEmitter;
+import ru.geekbrains.space_shooter.common.enemies.EnemyPool;
 import ru.geekbrains.space_shooter.common.explosions.ExplosionPool;
 import ru.geekbrains.space_shooter.common.BackGround;
 import ru.geekbrains.space_shooter.common.stars.TrackingStar;
@@ -28,18 +30,21 @@ public class GameScreen extends Base2DScreen {
     private static final int STARS_COUNT = 50;
 
 
-    private final BulletPool bulletPool= new BulletPool();
+    private final BulletPool bulletPool = new BulletPool();
     private ExplosionPool explosionPool;
+    private EnemyPool enemyPool;
 
     private TrackingStar[] stars = new TrackingStar[STARS_COUNT];
     private Sprite2DTexture textureBackGround;
     private TextureAtlas atlas;
     private BackGround backGround;
     private MainShip mainShip;
+    private EnemiesEmitter enemiesEmitter;
 
     private Sound sndExplosion;
-
-    private Music menuMusic;
+    private Music music;
+    private Sound sndBullet;
+    private Sound sndLaser;
 
     public GameScreen(Game game) {
         super(game);
@@ -48,21 +53,31 @@ public class GameScreen extends Base2DScreen {
     @Override
     public void show() {
         super.show();
+
+
+        music = Gdx.audio.newMusic(Gdx.files.internal("sounds/music.mp3"));
+        sndBullet = Gdx.audio.newSound(Gdx.files.internal("sounds/bullet.wav"));
+        sndLaser = Gdx.audio.newSound(Gdx.files.internal("sounds/laser.wav"));
+        sndExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
+
+
         textureBackGround = new Sprite2DTexture("textures/bgmain.png");
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         backGround = new BackGround(new TextureRegion(textureBackGround));
 
-
-        menuMusic = Gdx.audio.newMusic(Gdx.files.internal("sounds/menumsc.mp3"));
-        menuMusic.setLooping(true);
-        menuMusic.setVolume(0.7f);
-        menuMusic.play();
-
-        mainShip = new MainShip(atlas, bulletPool);
-
-        sndExplosion = Gdx.audio.newSound(Gdx.files.internal("sounds/explosion.wav"));
+        music.setLooping(true);
+        music.setVolume(0.7f);
+        music.play();
 
         explosionPool = new ExplosionPool(atlas,sndExplosion);
+        mainShip = new MainShip(atlas, bulletPool,explosionPool,worldBounds,sndLaser);
+        enemyPool = new EnemyPool(bulletPool,explosionPool,worldBounds,mainShip);
+
+        enemiesEmitter = new EnemiesEmitter(enemyPool,worldBounds,atlas,sndBullet);
+
+
+
+
 
 
 
@@ -110,11 +125,13 @@ public class GameScreen extends Base2DScreen {
 //        }
 
 
+        enemiesEmitter.generateEnemies(deltaTime);
         mainShip.update(deltaTime);
         for (int i = 0; i < stars.length ; i++) {
             stars[i].update(deltaTime);
         }
         bulletPool.updateActiveSprites(deltaTime);
+        enemyPool.updateActiveSprites(deltaTime);
         explosionPool.updateActiveSprites(deltaTime);
 
     }
@@ -126,6 +143,7 @@ public class GameScreen extends Base2DScreen {
     private  void  deleteAllDestroyed(){
         bulletPool.freeAllDestroyedActiveObjects();
         explosionPool.freeAllDestroyedActiveObjects();
+        enemyPool.freeAllDestroyedActiveObjects();
     }
 
     private void draw(){
@@ -138,17 +156,23 @@ public class GameScreen extends Base2DScreen {
         }
         mainShip.draw(batch);
         bulletPool.drawActiveSprites(batch);
+        enemyPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
         batch.end();
 
     }
     @Override
     public void dispose() {
+        music.dispose();
+        sndBullet.dispose();
+        sndLaser.dispose();
+        sndExplosion.dispose();
+
+
+        bulletPool.dispose();
         explosionPool.dispose();
         textureBackGround.dispose();
         atlas.dispose();
-        bulletPool.dispose();
-        sndExplosion.dispose();
         super.dispose();
     }
 

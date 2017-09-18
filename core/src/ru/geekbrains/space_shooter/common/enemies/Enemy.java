@@ -68,8 +68,8 @@ public class Enemy extends Ship {
             case DESCENT:if (getTop()<=worldBounds.getTop()){
                 v.set(v0);
                 state = State.FIGHT;
-                break;
             }
+                break;
             case FIGHT:
                 reloadTimer += deltaTime;
             if (reloadTimer >= reloadInterval) {

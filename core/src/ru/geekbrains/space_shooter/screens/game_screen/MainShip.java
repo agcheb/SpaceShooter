@@ -46,10 +46,19 @@ public class MainShip extends Ship {
         flushDestroy();
 
     }
+
+    private final float hpRegenInterval = 1f;
+    private float hpRegenTimer;
+
     @Override
     public void update(float deltaTime) {
         super.update(deltaTime);
         reloadTimer+= deltaTime;
+        hpRegenTimer+=deltaTime;
+        if(hpRegenTimer>=hpRegenInterval){
+            hpRegenTimer=0f;
+            if(hp<100)hp+=1;
+        }
         if(reloadTimer>=reloadInterval){
             reloadTimer=0f;
             shoot();
@@ -61,6 +70,7 @@ public class MainShip extends Ship {
     public void resize(Rect worldBounds) {
         setBottom(worldBounds.getBottom()+BOTTOM_MARGIN);
     }
+
 
 
     //команды управления кораблем

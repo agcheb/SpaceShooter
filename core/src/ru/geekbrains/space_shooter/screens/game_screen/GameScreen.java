@@ -21,6 +21,7 @@ import ru.geekbrains.space_shooter.common.enemies.EnemyPool;
 import ru.geekbrains.space_shooter.common.explosions.ExplosionPool;
 import ru.geekbrains.space_shooter.common.BackGround;
 import ru.geekbrains.space_shooter.common.stars.TrackingStar;
+import ru.geekbrains.space_shooter.screens.game_screen.ui.ButtonNewGame;
 import ru.geekbrains.space_shooter.screens.game_screen.ui.MessageGameOver;
 import ru.geekuniversity.engine.Base2DScreen;
 import ru.geekuniversity.engine.Font;
@@ -28,12 +29,14 @@ import ru.geekuniversity.engine.Sprite2DTexture;
 import ru.geekuniversity.engine.math.Rect;
 import ru.geekuniversity.engine.math.Rnd;
 import ru.geekuniversity.engine.utils.StrBuilder;
+import ui.ActionListener;
 
 /**
  * Created by agcheb on 06.09.17.
  */
 
-public class GameScreen extends Base2DScreen {
+public class GameScreen extends Base2DScreen implements ActionListener {
+
 
     private enum State{ PLAYING, GAME_OVER}
 
@@ -53,6 +56,8 @@ public class GameScreen extends Base2DScreen {
     private MainShip mainShip;
     private MessageGameOver messageGameOver;
     private EnemiesEmitter enemiesEmitter;
+
+    private ButtonNewGame buttonNewGame;
 
     private State state;
     private Sound sndExplosion;
@@ -92,7 +97,8 @@ public class GameScreen extends Base2DScreen {
 
 
 
-
+        messageGameOver = new MessageGameOver(atlas);
+        buttonNewGame = new ButtonNewGame(atlas,this);
 
 
         for (int i = 0; i < stars.length; i++) {
@@ -139,7 +145,7 @@ public class GameScreen extends Base2DScreen {
     @Override
     public void render(float delta) {
         update(delta);
-        checkCollisions();
+        if (state == State.PLAYING)checkCollisions();
         deleteAllDestroyed();
         draw();
     }
@@ -160,16 +166,20 @@ public class GameScreen extends Base2DScreen {
 //            Vector2 pos = new Vector2(posX,posY);
 //            explosion.set(0.2f,pos);
 //        }
-
-
-        enemiesEmitter.generateEnemies(deltaTime);
-        mainShip.update(deltaTime);
         for (int i = 0; i < stars.length ; i++) {
             stars[i].update(deltaTime);
         }
-        bulletPool.updateActiveSprites(deltaTime);
-        enemyPool.updateActiveSprites(deltaTime);
         explosionPool.updateActiveSprites(deltaTime);
+        if (state == State.PLAYING){
+                enemiesEmitter.generateEnemies(deltaTime,frags);
+                mainShip.update(deltaTime);
+                bulletPool.updateActiveSprites(deltaTime);
+                enemyPool.updateActiveSprites(deltaTime);
+            if(mainShip.isDestroyed()){
+                mainShip.boom();
+                state = State.GAME_OVER;
+            }
+        }
 
     }
 
@@ -199,6 +209,11 @@ public class GameScreen extends Base2DScreen {
                 if(mainShip.isBulletCollision(bullet)){
                     mainShip.damage(bullet.getDamage());
                     bullet.destroy();
+                    if(mainShip.isDestroyed()){
+                        mainShip.boom();
+                        state = State.GAME_OVER;
+                        return;
+                    }
                 }
             }
 
@@ -220,6 +235,7 @@ public class GameScreen extends Base2DScreen {
                 }
             }
         }
+
     }
 
     private  void  deleteAllDestroyed(){
@@ -236,12 +252,17 @@ public class GameScreen extends Base2DScreen {
         for (int i = 0; i < stars.length; i++) {
             stars[i].draw(batch);
         }
-        mainShip.draw(batch);
-
-        printInfo();
         bulletPool.drawActiveSprites(batch);
         enemyPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
+
+        mainShip.draw(batch);
+        printInfo();
+
+        if (state == State.GAME_OVER) {
+            messageGameOver.draw(batch);
+            buttonNewGame.draw(batch);
+        }
         batch.end();
 
     }
@@ -278,25 +299,48 @@ public class GameScreen extends Base2DScreen {
     }
 
     @Override
+    public void actionPerformed(Object src) {
+
+        if (src == buttonNewGame) {
+            startNewGame();
+        }
+        else {
+            throw new RuntimeException("Unknown src = "+ src);
+        }
+    }
+
+    @Override
     protected void touchDown(Vector2 touch, int pointer) {
-        mainShip.touchDown(touch, pointer);
+        switch (state){
+            case PLAYING:mainShip.touchDown(touch, pointer);
+                break;
+            case GAME_OVER:buttonNewGame.touchDown(touch, pointer);
+                break;
+            default:throw new RuntimeException("Unknown state: "+ state);
+        }
 
     }
 
     @Override
     protected void touchUp(Vector2 touch, int pointer) {
-        mainShip.touchUp(touch, pointer);
-    }
+        switch (state){
+            case PLAYING:mainShip.touchUp(touch, pointer);
+                break;
+            case GAME_OVER:buttonNewGame.touchUp(touch,pointer);
+                break;
+            default:throw new RuntimeException("Unknown state: "+ state);
+        }
+        }
 
     @Override
     public boolean keyDown(int keycode) {
-        mainShip.keyDown(keycode);
+        if (state == State.PLAYING)mainShip.keyDown(keycode);
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        mainShip.keyUp(keycode);
+        if (state == State.PLAYING)mainShip.keyUp(keycode);
         return false;
     }
 }

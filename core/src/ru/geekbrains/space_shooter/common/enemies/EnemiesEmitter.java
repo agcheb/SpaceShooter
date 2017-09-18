@@ -68,7 +68,8 @@ public class EnemiesEmitter {
         bulletRegion = atlas.findRegion("bulletEnemy");
     }
 
-    public void generateEnemies(float deltatime){
+    public void generateEnemies(float deltatime, int frags){
+        stage = frags / 10 + 1;
         generateTimer+=deltatime;
         if(generateTimer>=generateInterval){
             generateTimer=0f;
@@ -84,7 +85,7 @@ public class EnemiesEmitter {
                         ENEMY_SMALL_RELOAD_INTERVAL,
                         sndBullet,
                         ENEMY_SMALL_HEIGHT,
-                        ENEMY_SMALL_HP);
+                        ENEMY_SMALL_HP*stage);
                 }
             else if (type < 0.9f){
                 enemy.set(enemyMediumRegions,
@@ -96,7 +97,7 @@ public class EnemiesEmitter {
                         ENEMY_MEDIUM_RELOAD_INTERVAL,
                         sndBullet,
                         ENEMY_MEDIUM_HEIGHT,
-                        ENEMY_MEDIUM_HP);
+                        ENEMY_MEDIUM_HP*stage);
             }
             else {
                 enemy.set(enemyBigRegions,
@@ -108,7 +109,7 @@ public class EnemiesEmitter {
                         ENEMY_BIG_RELOAD_INTERVAL,
                         sndBullet,
                         ENEMY_BIG_HEIGHT,
-                        ENEMY_BIG_HP);
+                        ENEMY_BIG_HP*stage);
             }
             enemy.pos.x = Rnd.nextFloat(worldBounds.getLeft() + enemy.getHalfWidth(), worldBounds.getRight() - enemy.getHalfWidth());
             enemy.setBottom(worldBounds.getTop());

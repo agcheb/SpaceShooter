@@ -6,6 +6,7 @@ import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.space_shooter.common.bullets.BulletPool;
 import ru.geekbrains.space_shooter.common.bullets.Bullet;
+import ru.geekbrains.space_shooter.common.explosions.Explosion;
 import ru.geekbrains.space_shooter.common.explosions.ExplosionPool;
 import ru.geekuniversity.engine.math.Rect;
 import ru.geekuniversity.engine.sprites.Sprite;
@@ -42,9 +43,25 @@ public class Ship extends Sprite {
 
     }
 
+    private static final float DAMAGE_ANIMATION_INTERVAL = 0.1f;
+    private float damageAnimationTimer = DAMAGE_ANIMATION_INTERVAL;
+
+    public void damage(int damage){
+        System.out.println("hp= "+hp + " damage = " + damage);
+        frame = 1;
+        damageAnimationTimer = 0f;
+        hp -= damage;
+        if(hp<0) hp = 0;
+        if(hp == 0) {//boom();
+            destroy();}
+    }
+
     @Override
     public void update(float deltaTime) {
+
         pos.mulAdd(v,deltaTime);
+        damageAnimationTimer +=deltaTime;
+        if(damageAnimationTimer>=DAMAGE_ANIMATION_INTERVAL)frame=0;
     }
 
     @Override
@@ -58,6 +75,11 @@ public class Ship extends Sprite {
 
     protected float reloadInterval;
     protected float reloadTimer;
+
+    public void boom(){
+        Explosion explosion = explosionPool.obtain();
+        explosion.set(getHeight(),pos);
+    }
 
     protected void shoot(){
         Bullet bullet = bulletPool.obtain();

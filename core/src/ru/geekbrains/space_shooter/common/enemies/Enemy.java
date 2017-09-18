@@ -77,9 +77,12 @@ public class Enemy extends Ship {
                 shoot();
             }
             if (getBottom() < worldBounds.getBottom()) {
+                mainShip.damage(bulletDamage);
+                boom();
                 destroy();
             }
             break;
+            default:throw new RuntimeException("неизвестное состояние врага");
         }
     }
 
@@ -90,4 +93,8 @@ public class Enemy extends Ship {
     }
 
 
+    public boolean isBulletCollision(Rect bullet){
+
+        return  !(bullet.getRight() < getLeft() || bullet.getLeft() > getRight() || bullet.getTop() < getBottom() || bullet.getBottom() > pos.y);
+    }
 }

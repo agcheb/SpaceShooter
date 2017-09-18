@@ -1,6 +1,7 @@
 package ru.geekbrains.space_shooter.common.stars;
 
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector2;
 
 import ru.geekbrains.space_shooter.screens.game_screen.MainShip;
 
@@ -10,16 +11,16 @@ import ru.geekbrains.space_shooter.screens.game_screen.MainShip;
 
 public class TrackingStar extends ru.geekbrains.space_shooter.common.stars.Star {
 
-    private MainShip ship;
-        public TrackingStar(TextureAtlas atlas, MainShip ship, float vx, float vy, float height) {
+    private Vector2 shipV;
+        public TrackingStar(TextureAtlas atlas, Vector2 shipV, float vx, float vy, float height) {
         super(atlas.findRegion("star"), vx, vy, height);
-        this.ship = ship;
+        this.shipV = shipV;
     }
 
     @Override
     public void update(float deltaTime) {
         pos.mulAdd(v,deltaTime);
-        pos.mulAdd(ship.getV(),-0.2f*deltaTime);
+        pos.mulAdd(shipV,-0.2f*deltaTime);
         checkAndHandleBounds();
     }
 }

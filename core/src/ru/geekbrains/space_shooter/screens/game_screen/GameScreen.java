@@ -8,17 +8,26 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Align;
+import com.badlogic.gdx.utils.StringBuilder;
 
+import java.util.ArrayList;
+
+import ru.geekbrains.space_shooter.common.bullets.Bullet;
 import ru.geekbrains.space_shooter.common.bullets.BulletPool;
 import ru.geekbrains.space_shooter.common.enemies.EnemiesEmitter;
+import ru.geekbrains.space_shooter.common.enemies.Enemy;
 import ru.geekbrains.space_shooter.common.enemies.EnemyPool;
 import ru.geekbrains.space_shooter.common.explosions.ExplosionPool;
 import ru.geekbrains.space_shooter.common.BackGround;
 import ru.geekbrains.space_shooter.common.stars.TrackingStar;
+import ru.geekbrains.space_shooter.screens.game_screen.ui.MessageGameOver;
 import ru.geekuniversity.engine.Base2DScreen;
+import ru.geekuniversity.engine.Font;
 import ru.geekuniversity.engine.Sprite2DTexture;
 import ru.geekuniversity.engine.math.Rect;
 import ru.geekuniversity.engine.math.Rnd;
+import ru.geekuniversity.engine.utils.StrBuilder;
 
 /**
  * Created by agcheb on 06.09.17.
@@ -26,9 +35,12 @@ import ru.geekuniversity.engine.math.Rnd;
 
 public class GameScreen extends Base2DScreen {
 
+    private enum State{ PLAYING, GAME_OVER}
+
+
     private static final float STAR_HEIGHT = 0.01f;
     private static final int STARS_COUNT = 50;
-
+    private static final float FONT_SIZE = 0.02f;
 
     private final BulletPool bulletPool = new BulletPool();
     private ExplosionPool explosionPool;
@@ -39,12 +51,16 @@ public class GameScreen extends Base2DScreen {
     private TextureAtlas atlas;
     private BackGround backGround;
     private MainShip mainShip;
+    private MessageGameOver messageGameOver;
     private EnemiesEmitter enemiesEmitter;
 
+    private State state;
     private Sound sndExplosion;
     private Music music;
     private Sound sndBullet;
     private Sound sndLaser;
+
+    private Font font;
 
     public GameScreen(Game game) {
         super(game);
@@ -65,9 +81,7 @@ public class GameScreen extends Base2DScreen {
         atlas = new TextureAtlas("textures/mainAtlas.tpack");
         backGround = new BackGround(new TextureRegion(textureBackGround));
 
-        music.setLooping(true);
-        music.setVolume(0.7f);
-        music.play();
+
 
         explosionPool = new ExplosionPool(atlas,sndExplosion);
         mainShip = new MainShip(atlas, bulletPool,explosionPool,worldBounds,sndLaser);
@@ -85,8 +99,31 @@ public class GameScreen extends Base2DScreen {
             float vx = Rnd.nextFloat(-0.005f,0.005f);
             float vy = Rnd.nextFloat(-0.05f,-0.01f);
             float starHeight = STAR_HEIGHT * Rnd.nextFloat(0.75f,1f);
-            stars[i] = new TrackingStar(atlas,mainShip, vx,vy,starHeight);
+            stars[i] = new TrackingStar(atlas,mainShip.getV(), vx,vy,starHeight);
         }
+
+        font = new Font("fonts/font.fnt", "fonts/font.png");
+        font.setWorldSize(FONT_SIZE);
+
+
+        music.setLooping(true);
+        music.setVolume(0.7f);
+        music.play();
+
+        startNewGame();
+    }
+
+    private void startNewGame(){
+        state = State.PLAYING;
+        frags = 0;
+        mainShip.setToNewGame();
+        enemiesEmitter.setToNewGame();
+
+
+        bulletPool.freeAllActiveObjects();
+        enemyPool.freeAllActiveObjects();
+        explosionPool.freeAllActiveObjects();
+
     }
 
     @Override
@@ -137,7 +174,52 @@ public class GameScreen extends Base2DScreen {
     }
 
     private void checkCollisions(){
+        ArrayList<Enemy> enemies = enemyPool.getActiveObjects();
+        final int enemyCount = enemies.size();
+        ArrayList<Bullet> bullets = bulletPool.getActiveObjects();
+        final int bulletCount = bullets.size();
 
+        for (int i = 0; i < enemyCount; i++) {
+            Enemy enemy = enemies.get(i);
+            if(enemy.isDestroyed())continue;
+            float minDist = enemy.getHalfWidth()+mainShip.getHalfWidth();
+            if(enemy.pos.dst2(mainShip.pos) < minDist * minDist){
+                enemy.boom();
+                enemy.destroy();
+                mainShip.boom();
+                mainShip.destroy();
+                state = State.GAME_OVER;
+                return;
+            }
+        }
+
+            for (int j = 0; j < bulletCount; j++) {
+                Bullet bullet = bullets.get(j);
+                if(bullet.getOwner() == mainShip || bullet.isDestroyed())continue;
+                if(mainShip.isBulletCollision(bullet)){
+                    mainShip.damage(bullet.getDamage());
+                    bullet.destroy();
+                }
+            }
+
+
+        for (int i = 0; i < enemyCount ; i++) {
+            Enemy enemy = enemies.get(i);
+            if(enemy.isDestroyed())continue;
+            for (int j = 0; j < bulletCount; j++) {
+                Bullet bullet = bullets.get(j);
+                if(bullet.getOwner() != mainShip || bullet.isDestroyed())continue;
+                if(enemy.isBulletCollision(bullet)){
+                    enemy.damage(bullet.getDamage());
+                    bullet.destroy();
+                    if(enemy.isDestroyed()){
+                        enemy.boom();
+                        frags++;
+                        break;
+                    }
+                }
+            }
+        }
     }
 
     private  void  deleteAllDestroyed(){
@@ -155,12 +237,30 @@ public class GameScreen extends Base2DScreen {
             stars[i].draw(batch);
         }
         mainShip.draw(batch);
+
+        printInfo();
         bulletPool.drawActiveSprites(batch);
         enemyPool.drawActiveSprites(batch);
         explosionPool.drawActiveSprites(batch);
         batch.end();
 
     }
+
+    private int frags;
+    private StrBuilder sbFrags = new StrBuilder();
+    private static final String STR_FRAGS = "FRAGS: ";
+    private StrBuilder sbHP = new StrBuilder();
+    private static final String STR_HP = "HP: ";
+
+    private StrBuilder sbStage = new StrBuilder();
+    private static final String STR_STAGE = "STAGE: ";
+    private void printInfo(){
+
+        font.draw(batch,sbFrags.clear().append(STR_FRAGS).append(frags),worldBounds.getLeft(),worldBounds.getTop());
+        font.draw(batch,sbHP.clear().append(STR_HP).append(mainShip.getHP()),worldBounds.pos.x,worldBounds.getTop(), Align.center);
+        font.draw(batch,sbStage.clear().append(STR_STAGE).append(enemiesEmitter.getStage()),worldBounds.getRight(),worldBounds.getTop(),Align.right);
+    }
+
     @Override
     public void dispose() {
         music.dispose();
@@ -173,6 +273,7 @@ public class GameScreen extends Base2DScreen {
         explosionPool.dispose();
         textureBackGround.dispose();
         atlas.dispose();
+        font.dispose();
         super.dispose();
     }
 

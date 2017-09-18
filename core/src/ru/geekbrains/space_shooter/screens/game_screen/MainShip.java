@@ -24,28 +24,31 @@ public class MainShip extends Ship {
 
     MainShip(TextureAtlas atlas, BulletPool bulletPool, ExplosionPool explosionPool, Rect worldBounds, Sound bulletSound) {
         super(atlas.findRegion("main_ship"),1,2,2,bulletPool,explosionPool,worldBounds);
+        bulletRegion = atlas.findRegion("bulletMainShip");
 
         this.bulletSound = bulletSound;
 
         setHeightProportion(SHIP_HEIGHT);
-        bulletRegion = atlas.findRegion("bulletMainShip");
+
+        setToNewGame();
+
+    }
+
+    void setToNewGame(){
+        pos.x = worldBounds.pos.x;
+
         bulletHeight = 0.01f;
         bulletV.set(0f,0.5f);
         bulletDamage = 1;
-
         reloadInterval = 0.15f;
 
-
+        hp = 100;
+        flushDestroy();
 
     }
-
-    public Vector2 getV() {
-        return v;
-    }
-
     @Override
     public void update(float deltaTime) {
-        pos.mulAdd(v,deltaTime);
+        super.update(deltaTime);
         reloadTimer+= deltaTime;
         if(reloadTimer>=reloadInterval){
             reloadTimer=0f;
@@ -56,7 +59,6 @@ public class MainShip extends Ship {
 
     @Override
     public void resize(Rect worldBounds) {
-        super.resize(worldBounds);
         setBottom(worldBounds.getBottom()+BOTTOM_MARGIN);
     }
 
@@ -133,7 +135,7 @@ public class MainShip extends Ship {
                 pressedRight = false;
                 if(pressedLeft) moveLeft(); else stop();
                 break;
-            case Input.Keys.UP: frame = 0; break;
+            case Input.Keys.UP:  break;
         }
     }
     // конец событий нажатия на экран
@@ -146,4 +148,17 @@ public class MainShip extends Ship {
         if(getLeft() < worldBounds.getLeft()){setLeft(worldBounds.getLeft());stop();}
         if(getRight() > worldBounds.getRight()){setRight(worldBounds.getRight());stop();}
      }
+     int getHP(){
+         return hp;
+     }
+
+     Vector2 getV(){
+         return v;
+     }
+
+    public boolean isBulletCollision(Rect bullet){
+
+        return  !(bullet.getRight() < getLeft() || bullet.getLeft() > getRight() || bullet.getTop() < pos.y || bullet.getBottom() > getTop());
+    }
+
 }

@@ -15,6 +15,8 @@ import ru.geekuniversity.engine.utils.Regions;
 
 public class EnemiesEmitter {
 
+    private int stage;
+
     private final Rect worldBounds;
     private final Sound sndBullet;
     private final EnemyPool enemyPool;
@@ -112,5 +114,13 @@ public class EnemiesEmitter {
             enemy.setBottom(worldBounds.getTop());
 
         }
+    }
+
+
+    public void setToNewGame(){
+        stage = 1;
+    }
+    public int getStage() {
+        return stage;
     }
 }
